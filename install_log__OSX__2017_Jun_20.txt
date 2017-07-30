@@ -1,0 +1,35 @@
+# This is the log of the commands run by Michael Nahas
+# when I installed on 2017 Jun 19.
+# on OSX 10.10.5 Yosemite
+
+# May need pip.  Installed in /usr/local/bin/pip
+# sudo easy_install pip
+
+# Tried to run this.  It hit an exception, so I skipped it.
+#pip install --upgrade pip
+
+# needed library
+# I added --user flag when I had permissions error.
+pip install openpyxl
+
+# Had to remove Windows-specific directory slash \\ so that it worked on Unix.
+python data_read.py
+
+# That command created these files:
+#   UK_Daily.csv
+#   UK_Monthly. csv
+#   UK_Weekly.csv
+
+python ./AAA_RUN_KANSM2_Est_LB.py
+
+# That command opened a number of graphs
+# It created files:
+#   EMS_Monthly.jpg
+#   ETZ_Monthly.jpg
+#   SSR_Monthly.jpg
+#   UK_GSW_Govt_rL_Est_30.000000_KANSM2_Monthly_IEKF_E-5.000000_Final_2017_06_19_15_59_39_final.csv
+#   plot.pdf
+
+# Seemed to only run the UK data, not all countries.
+#
+# Unfortunately, ran out of time to play with the code right now.  Leaving this here.
