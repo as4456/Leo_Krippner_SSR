@@ -33,7 +33,7 @@ def AAE_KAGM_f_and_df_dx(x_t, rL, KappaQ2, Sigma1, Sigma2, Rho12, TauGrid, ZLB_I
         Omega = numpy.sqrt(Sigma1**2 * G_11 + Sigma2**2 * G_22 + 2 * Rho12 * Sigma1 * Sigma2 * G_12)
 
         # Calculate cumulative normal probabilities for N(0,1) distribution.
-        d = numpy.divide(GATSM_f-rL, Omega)
+        d = numpy.divide(GATSM_f-rL, Omega,where=Omega!=0)
         normsdist_erf_d = normsdist_erf(d)
 
         # Calculate gradiant and CAB_GATSM_f
