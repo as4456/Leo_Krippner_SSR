@@ -8,8 +8,8 @@ import csv
 import os
 
 def write_to_csv(idx,idx1,val,val1,sub_datenum,name):
-    daily_values_data=map(list,zip(*val))
-    daily_values_data1=map(list,zip(*val1))
+    daily_values_data=list(map(list,list(zip(*val))))
+    daily_values_data1=list(map(list,list(zip(*val1))))
 
     daily_date_index=list(idx)
     daily_date_index[:] = [x - sub_datenum for x in idx]
@@ -22,19 +22,19 @@ def write_to_csv(idx,idx1,val,val1,sub_datenum,name):
     for i in range(len(daily_values_data1)):
         daily_values_data1[i].insert(0,daily_date_index1[i])
         
-    with open(name+'.csv', 'wb') as csvfile:
+    with open(name+'.csv', 'w') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_NONNUMERIC)
         spamwriter.writerows(daily_values_data1)
         spamwriter.writerows(daily_values_data)
         
 def filter_data_index(a,thr,method):
-    if method is 'ge':
+    if method =='ge':
         index=list([idx for idx,i in enumerate(a) if i<thr])
-    elif method is 'le':
+    elif method =='le':
         index=list([idx for idx,i in enumerate(a) if i>thr])
-    elif method is 'l':
+    elif method =='l':
         index=list([idx for idx,i in enumerate(a) if i>=thr])
-    elif method is 'g':
+    elif method =='g':
         index=list([idx for idx,i in enumerate(a) if i<=thr])
     return index
 
@@ -62,16 +62,16 @@ Country='UK'# US, EA, JP, UK.
 CurveType='OIS'
 PathName=os.getcwd()
 ExcelName=os.path.join(PathName, 'A_'+Country+'_All_Data_Bloomberg.xlsx')
-if CurveType is 'OIS':
+if CurveType =='OIS':
     ExcelSheetName='D. Live OIS data'
-if CurveType is 'Govt':
+if CurveType =='Govt':
     ExcelSheetName='D. Live Govt data';
 
 Maturities=[0.25,0.5,1,2,3,4,5,7,10,15,20,30]
 
 wb=openpyxl.load_workbook(ExcelName)
-sheet_names=wb.get_sheet_names()
-sheet=wb.get_sheet_by_name('D. Live OIS data')
+sheet_names=wb.get_sheet_names
+sheet=wb['D. Live OIS data']
 datenum = [[] for i in range(len(datelist))]
 values_data=[[] for i in range(len(datelist))]
 for col_num in range(len(datelist)):
@@ -97,15 +97,15 @@ for i in range(len(datenum)):
     diff_dates=list(set(common_datenum) ^ set(datenum[i]))
     for j in diff_dates:
         index=datenum[i].index(j)
-        print(str(j)+' date num at '+str(index)+'removed') 
+        print((str(j)+' date num at '+str(index)+'removed')) 
         value_to_remove = values_data[i][index]
         values_data[i].remove(value_to_remove)
 
-ref_friday=datetime.date(2013,05,24).toordinal()
+ref_friday=datetime.date(2013,0o5,24).toordinal()
 weeks_to_step_back = (ref_friday - common_datenum[0])/7
 first_friday = ref_friday - (weeks_to_step_back*7)
 
-week_date_index = range(first_friday,common_datenum[-1],7)
+week_date_index = list(range(int(first_friday),common_datenum[-1],7))
 
 week_values_data=[[] for i in range(len(datelist))]
 for i in range(len(datelist)):
@@ -139,7 +139,7 @@ BusinessDayTimestamp = float(common_datenum[-1]-common_datenum[0]+1)/(len(common
     
 
 #GOVT
-if Country is 'EA':
+if Country =='EA':
     wbG=openpyxl.load_workbook(os.path.join(PathName, 'A_GE_All_Data_Bloomberg.xlsx'))
     sheet=wbG.get_sheet_by_name('D. Live Govt data')
     datenumG = [[] for i in range(len(datelist))]
@@ -168,7 +168,7 @@ if Country is 'EA':
         diff_dates=list(set(common_datenumG) ^ set(datenumG[i]))
         for j in diff_dates:
             index=datenumG[i].index(j)
-            print(str(j)+' date num at '+str(index)+'removed') 
+            print((str(j)+' date num at '+str(index)+'removed')) 
             value_to_remove = values_dataG[i][index]
             values_dataG[i].remove(value_to_remove)
 
@@ -210,7 +210,7 @@ if Country is 'EA':
         diff_dates=list(set(common_datenumF) ^ set(datenumF[i]))
         for j in diff_dates:
             index=datenumG[i].index(j)
-            print(str(j)+' date num at '+str(index)+'removed') 
+            print((str(j)+' date num at '+str(index)+'removed')) 
             value_to_remove = values_dataF[i][index]
             values_dataF[i].remove(value_to_remove)
 
@@ -227,14 +227,14 @@ if Country is 'EA':
         diff_dates=list(set(post_inter_index) ^ set(post_euro_fr_index))
         for j in diff_dates:
             index=post_euro_fr_index.index(j)
-            print(str(j)+' date num at '+str(index)+'removed') 
+            print((str(j)+' date num at '+str(index)+'removed')) 
             value_to_remove = post_euro_fr_vlues[i][index]
             post_euro_fr_vlues[i].remove(value_to_remove)
     for i in range(len(post_euro_ge_vlues)):
         diff_dates=list(set(post_inter_index) ^ set(post_euro_ge_index))
         for j in diff_dates:
             index=post_euro_ge_index.index(j)
-            print(str(j)+' date num at '+str(index)+'removed') 
+            print((str(j)+' date num at '+str(index)+'removed')) 
             value_to_remove = post_euro_ge_vlues[i][index]
             post_euro_ge_vlues[i].remove(value_to_remove)
     
@@ -246,7 +246,7 @@ if Country is 'EA':
         values_data1[i] = pre_euro_ge_vlues[i] + post_euro_avg_values
     
 else:
-    sheet=wb.get_sheet_by_name('D. Live Govt data')
+    sheet=wb['D. Live Govt data']
     datenum1 = [[] for i in range(len(datelist))]
     values_data1=[[] for i in range(len(datelist))]
     for col_num in range(len(datelist)):
@@ -273,15 +273,15 @@ else:
         diff_dates=list(set(common_datenum1) ^ set(datenum1[i]))
         for j in diff_dates:
             index=datenum1[i].index(j)
-            print(str(j)+' date num at '+str(index)+'removed') 
+            print((str(j)+' date num at '+str(index)+'removed')) 
             value_to_remove = values_data1[i][index]
             values_data1[i].remove(value_to_remove)
 
-ref_friday=datetime.date(2013,05,24).toordinal()
+ref_friday=datetime.date(2013,0o5,24).toordinal()
 weeks_to_step_back = (ref_friday - common_datenum1[0])/7
 first_friday = ref_friday - (weeks_to_step_back*7)
 
-week_date_index1 = range(first_friday,common_datenum1[-1],7)
+week_date_index1 = list(range(int(first_friday),common_datenum1[-1],7))
 week_values_data1=[[] for i in range(len(datelist))]
 for i in range(len(datelist)):
     f=interpolate.interp1d(common_datenum1,values_data1[i],'zero',bounds_error=False)
